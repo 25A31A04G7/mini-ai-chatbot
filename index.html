@@ -5,42 +5,192 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Mini AI Chatbot</title>
+    <title>Mini AI</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="chat-container">
+    <div class="app">
 
-        <div class="chat-header">
-            <h1>🤖 Mini AI Chatbot</h1>
-        </div>
+        <!-- ================= SIDEBAR ================= -->
 
-        <div class="chat-box" id="chat-box">
+        <aside class="sidebar" id="sidebar">
 
-            <div class="message ai-message">
-                AI: Hello! How can I help you?
+            <div class="sidebar-top">
+
+                <div class="logo">
+                    <div class="logo-icon">✦</div>
+                    <span>Mini AI</span>
+                </div>
+
+                <button class="close-sidebar" id="close-sidebar">
+                    ×
+                </button>
+
             </div>
 
-        </div>
-
-        <div class="input-area">
-
-            <input
-                type="text"
-                id="user-input"
-                placeholder="Type your message..."
-            >
-
-            <button id="send-button" onclick="sendMessage()">
-                Send
+            <button class="new-chat-btn" id="new-chat">
+                <span>＋</span>
+                New chat
             </button>
 
-        </div>
+            <div class="sidebar-section">
+
+                <p class="section-title">Your chats</p>
+
+                <div class="chat-history" id="chat-history">
+
+                    <div class="history-item active">
+                        <span>💬</span>
+                        <span class="history-text">New conversation</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="sidebar-bottom">
+
+                <div class="powered-by">
+                    <div class="mini-logo">✦</div>
+
+                    <div>
+                        <strong>Mini AI</strong>
+                        <p>AI assistant</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ================= MAIN ================= -->
+
+        <main class="main">
+
+            <!-- Header -->
+
+            <header class="topbar">
+
+                <button class="menu-btn" id="menu-btn">
+                    ☰
+                </button>
+
+                <div class="mobile-logo">
+                    <div class="logo-icon">✦</div>
+                    <span>Mini AI</span>
+                </div>
+
+                <div class="topbar-right">
+
+                    <div class="connection-status">
+                        <span class="status-dot"></span>
+                        Online
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- Chat -->
+
+            <section class="chat-area" id="chat-box">
+
+                <!-- Welcome Screen -->
+
+                <div class="welcome" id="welcome">
+
+                    <div class="welcome-logo">
+                        <span>✦</span>
+                    </div>
+
+                    <h1>
+                        How can I help you?
+                    </h1>
+
+                    <p>
+                        Ask questions, learn something new, or just start a conversation.
+                    </p>
+
+
+                    <div class="suggestions">
+
+                        <button class="suggestion" data-message="Explain artificial intelligence in simple words">
+                            <span>💡</span>
+                            <div>
+                                <strong>Learn something</strong>
+                                <small>Explain a concept simply</small>
+                            </div>
+                        </button>
+
+                        <button class="suggestion" data-message="Help me create a study plan">
+                            <span>📚</span>
+                            <div>
+                                <strong>Study help</strong>
+                                <small>Create a useful study plan</small>
+                            </div>
+                        </button>
+
+                        <button class="suggestion" data-message="Give me some creative ideas">
+                            <span>✨</span>
+                            <div>
+                                <strong>Get creative</strong>
+                                <small>Explore new ideas</small>
+                            </div>
+                        </button>
+
+                        <button class="suggestion" data-message="Tell me an interesting fact">
+                            <span>🌎</span>
+                            <div>
+                                <strong>Something interesting</strong>
+                                <small>Discover something new</small>
+                            </div>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Input -->
+
+            <section class="composer-section">
+
+                <div class="composer">
+
+                    <textarea
+                        id="user-input"
+                        rows="1"
+                        placeholder="Message Mini AI..."
+                        autocomplete="off"
+                    ></textarea>
+
+                    <button
+                        id="send-button"
+                        aria-label="Send message"
+                        disabled
+                    >
+                        <span>↑</span>
+                    </button>
+
+                </div>
+
+                <p class="disclaimer">
+                    Mini AI may make mistakes. Check important information.
+                </p>
+
+            </section>
+
+        </main>
 
     </div>
+
 
     <script src="script.js"></script>
 
