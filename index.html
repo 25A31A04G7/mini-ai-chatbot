@@ -26,7 +26,7 @@
                     <span>Mini AI</span>
                 </div>
 
-                <button class="close-sidebar" id="close-sidebar">
+                <button class="close-sidebar" id="close-sidebar" aria-label="Close Sidebar">
                     ×
                 </button>
 
@@ -54,6 +54,28 @@
 
             <div class="sidebar-bottom">
 
+                <div class="user-account-container" id="user-account-container">
+                    <!-- Unauthenticated state -->
+                    <div class="guest-account-box" id="guest-account-box">
+                        <button class="auth-btn login-trigger" id="open-login-btn">Sign in</button>
+                        <button class="auth-btn signup-trigger" id="open-signup-btn">Sign up</button>
+                    </div>
+
+                    <!-- Authenticated state -->
+                    <div class="user-profile-box hidden" id="user-profile-box">
+                        <div class="user-profile-info">
+                            <div class="user-avatar" id="user-avatar-initials">U</div>
+                            <div class="user-details">
+                                <strong id="user-display-name">User Name</strong>
+                                <p id="user-display-email">user@email.com</p>
+                            </div>
+                        </div>
+                        <div class="user-actions">
+                            <button class="logout-btn" id="logout-btn">Log out</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="powered-by">
                     <div class="mini-logo">✦</div>
 
@@ -76,7 +98,7 @@
 
             <header class="topbar">
 
-                <button class="menu-btn" id="menu-btn">
+                <button class="menu-btn" id="menu-btn" aria-label="Open menu">
                     ☰
                 </button>
 
@@ -90,6 +112,10 @@
                     <div class="connection-status">
                         <span class="status-dot"></span>
                         Online
+                    </div>
+
+                    <div class="mobile-auth-actions" id="mobile-auth-actions">
+                        <button class="mobile-auth-btn" id="mobile-login-btn">Sign in</button>
                     </div>
 
                 </div>
@@ -190,6 +216,172 @@
 
         </main>
 
+    </div>
+
+
+    <!-- ================= MODALS / AUTH OVERLAYS ================= -->
+
+    <!-- LOGIN MODAL -->
+    <div class="modal-overlay hidden" id="login-modal">
+        <div class="modal-card">
+            <button class="modal-close" id="close-login-modal" aria-label="Close modal">×</button>
+
+            <div class="modal-header">
+                <div class="modal-logo">✦</div>
+                <h2>Welcome back 👋</h2>
+                <p>Sign in to your Mini AI account</p>
+            </div>
+
+            <div class="auth-message hidden" id="login-message"></div>
+
+            <form id="login-form" novalidate>
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="name@example.com" required autocomplete="email">
+                    <span class="field-error" id="login-email-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <div class="label-with-link">
+                        <label for="login-password">Password</label>
+                        <a href="#" class="forgot-link" id="goto-forgot-btn">Forgot password?</a>
+                    </div>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="login-password" placeholder="Enter your password" required autocomplete="current-password">
+                        <button type="button" class="toggle-password" data-target="login-password" aria-label="Toggle password visibility">👁</button>
+                    </div>
+                    <span class="field-error" id="login-password-error"></span>
+                </div>
+
+                <button type="submit" class="submit-btn" id="login-submit-btn">
+                    <span class="btn-text">Sign in</span>
+                    <span class="spinner hidden"></span>
+                </button>
+            </form>
+
+            <div class="modal-footer">
+                <p>Don't have an account? <a href="#" id="goto-signup-btn">Create account</a></p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- SIGNUP MODAL -->
+    <div class="modal-overlay hidden" id="signup-modal">
+        <div class="modal-card">
+            <button class="modal-close" id="close-signup-modal" aria-label="Close modal">×</button>
+
+            <div class="modal-header">
+                <div class="modal-logo">✦</div>
+                <h2>Create your account</h2>
+                <p>Start your conversations with Mini AI</p>
+            </div>
+
+            <div class="auth-message hidden" id="signup-message"></div>
+
+            <form id="signup-form" novalidate>
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" placeholder="John Doe" required autocomplete="name">
+                    <span class="field-error" id="signup-name-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" placeholder="name@example.com" required autocomplete="email">
+                    <span class="field-error" id="signup-email-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="signup-password" placeholder="At least 6 characters" required autocomplete="new-password">
+                        <button type="button" class="toggle-password" data-target="signup-password" aria-label="Toggle password visibility">👁</button>
+                    </div>
+                    <!-- Password strength bar -->
+                    <div class="strength-meter hidden" id="strength-meter">
+                        <div class="strength-bar" id="strength-bar"></div>
+                    </div>
+                    <span class="strength-text" id="strength-text"></span>
+                    <span class="field-error" id="signup-password-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="signup-confirm-password">Confirm Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="signup-confirm-password" placeholder="Repeat your password" required autocomplete="new-password">
+                        <button type="button" class="toggle-password" data-target="signup-confirm-password" aria-label="Toggle password visibility">👁</button>
+                    </div>
+                    <span class="field-error" id="signup-confirm-error"></span>
+                </div>
+
+                <button type="submit" class="submit-btn" id="signup-submit-btn">
+                    <span class="btn-text">Create account</span>
+                    <span class="spinner hidden"></span>
+                </button>
+            </form>
+
+            <div class="modal-footer">
+                <p>Already have an account? <a href="#" id="goto-login-btn">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div class="modal-overlay hidden" id="forgot-modal">
+        <div class="modal-card">
+            <button class="modal-close" id="close-forgot-modal" aria-label="Close modal">×</button>
+
+            <div class="modal-header">
+                <div class="modal-logo">✦</div>
+                <h2>Reset Password</h2>
+                <p>Enter your account email to receive a verification code</p>
+            </div>
+
+            <div class="auth-message hidden" id="forgot-message"></div>
+
+            <!-- Step 1: Request Code -->
+            <form id="forgot-request-form" novalidate>
+                <div class="form-group">
+                    <label for="forgot-email">Email Address</label>
+                    <input type="email" id="forgot-email" placeholder="name@example.com" required autocomplete="email">
+                    <span class="field-error" id="forgot-email-error"></span>
+                </div>
+
+                <button type="submit" class="submit-btn" id="forgot-submit-btn">
+                    <span class="btn-text">Send Instructions</span>
+                    <span class="spinner hidden"></span>
+                </button>
+            </form>
+
+            <!-- Step 2: Verification Code & New Password -->
+            <form id="forgot-reset-form" class="hidden" novalidate>
+                <div class="form-group">
+                    <label for="forgot-code">Verification Code</label>
+                    <input type="text" id="forgot-code" placeholder="Enter 6-digit code" required autocomplete="off">
+                    <span class="field-error" id="forgot-code-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="forgot-new-password">New Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="forgot-new-password" placeholder="At least 6 characters" required autocomplete="new-password">
+                        <button type="button" class="toggle-password" data-target="forgot-new-password" aria-label="Toggle password visibility">👁</button>
+                    </div>
+                    <span class="field-error" id="forgot-new-password-error"></span>
+                </div>
+
+                <button type="submit" class="submit-btn" id="reset-submit-btn">
+                    <span class="btn-text">Reset Password</span>
+                    <span class="spinner hidden"></span>
+                </button>
+            </form>
+
+            <div class="modal-footer">
+                <p>Remember your password? <a href="#" id="forgot-goto-login-btn">Back to Sign in</a></p>
+            </div>
+        </div>
     </div>
 
 
