@@ -1,5 +1,5 @@
 /* =========================================================
-   MINI AI — PROFESSIONAL CHAT UI
+   MINI AI — PROFESSIONAL CHAT UI & AUTHENTICATION STYLES
    ========================================================= */
 
 * {
@@ -17,6 +17,10 @@
     --hover: #eeeeee;
     --message: #f4f4f4;
     --dark: #171717;
+    --error: #ef4444;
+    --error-bg: #fef2f2;
+    --success: #10b981;
+    --success-bg: #ecfdf5;
 }
 
 body {
@@ -35,6 +39,10 @@ body {
     width: 100%;
     height: 100vh;
     overflow: hidden;
+}
+
+.hidden {
+    display: none !important;
 }
 
 
@@ -137,6 +145,8 @@ body {
 
 .sidebar-section {
     margin-top: 30px;
+    flex: 1;
+    overflow-y: auto;
 }
 
 .section-title {
@@ -169,6 +179,7 @@ body {
     cursor: pointer;
 
     transition: 0.2s;
+    position: relative;
 }
 
 .history-item:hover,
@@ -180,20 +191,150 @@ body {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    flex: 1;
+}
+
+.delete-chat-btn {
+    opacity: 0;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.history-item:hover .delete-chat-btn {
+    opacity: 1;
+}
+
+.delete-chat-btn:hover {
+    color: var(--error);
+    background: var(--error-bg);
 }
 
 .sidebar-bottom {
     margin-top: auto;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
 }
 
-.powered-by {
-    border-top: 1px solid var(--border);
+/* User Account Container in Sidebar */
+.user-account-container {
+    margin-bottom: 12px;
+}
 
-    padding: 15px 5px 5px;
+.guest-account-box {
+    display: flex;
+    gap: 8px;
+}
 
+.auth-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.login-trigger {
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+
+.login-trigger:hover {
+    background: var(--hover);
+}
+
+.signup-trigger {
+    background: var(--dark);
+    border: 1px solid var(--dark);
+    color: white;
+}
+
+.signup-trigger:hover {
+    background: #333;
+}
+
+.user-profile-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.user-profile-info {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--dark);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.user-details {
+    overflow: hidden;
+}
+
+.user-details strong {
+    display: block;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-details p {
+    color: var(--muted);
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.logout-btn {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    background: var(--error-bg);
+    color: var(--error);
+    border-color: #fca5a5;
+}
+
+.powered-by {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 5px;
 }
 
 .mini-logo {
@@ -274,6 +415,9 @@ body {
 
 .topbar-right {
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 .connection-status {
@@ -293,6 +437,20 @@ body {
     background: #22c55e;
 
     border-radius: 50%;
+}
+
+.mobile-auth-actions {
+    display: none;
+}
+
+.mobile-auth-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 
@@ -700,6 +858,290 @@ body {
 
 
 /* =========================================================
+   MODAL / AUTH STYLES
+   ========================================================= */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-card {
+    background: white;
+    width: min(420px, 100%);
+    border-radius: 18px;
+    padding: 32px 28px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+    position: relative;
+    animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.modal-close:hover {
+    background: var(--hover);
+    color: var(--text);
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.modal-logo {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--dark);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin: 0 auto 14px;
+}
+
+.modal-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+}
+
+.modal-header p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.auth-message {
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 18px;
+    line-height: 1.4;
+}
+
+.auth-message.error {
+    background: var(--error-bg);
+    color: var(--error);
+    border: 1px solid #fca5a5;
+}
+
+.auth-message.success {
+    background: var(--success-bg);
+    color: var(--success);
+    border: 1px solid #6ee7b7;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+}
+
+.label-with-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.forgot-link {
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: var(--text);
+    text-decoration: underline;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fafafa;
+}
+
+.form-group input:focus {
+    border-color: var(--dark);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(23, 23, 23, 0.08);
+}
+
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper input {
+    padding-right: 42px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--muted);
+    padding: 4px;
+
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: var(--text);
+}
+
+.field-error {
+    display: block;
+    color: var(--error);
+    font-size: 11px;
+    margin-top: 4px;
+    min-height: 14px;
+}
+
+.strength-meter {
+    height: 4px;
+    width: 100%;
+    background: #e5e5e5;
+    border-radius: 2px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-text {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 3px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: var(--dark);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: #333;
+}
+
+.submit-btn:active:not(:disabled) {
+    transform: scale(0.99);
+}
+
+.submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.modal-footer {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.modal-footer a {
+    color: var(--text);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.modal-footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
    MOBILE
    ========================================================= */
 
@@ -750,6 +1192,10 @@ body {
 
     .connection-status {
         font-size: 11px;
+    }
+
+    .mobile-auth-actions {
+        display: block;
     }
 
     .composer-section {
@@ -810,6 +1256,10 @@ body {
 
     .suggestion {
         padding: 12px;
+    }
+
+    .modal-card {
+        padding: 24px 20px;
     }
 
 }

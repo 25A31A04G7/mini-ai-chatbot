@@ -1,3 +1,20 @@
-.env
+# Byte-compiled / optimized / DLL files
 __pycache__/
-venv/
+*.py[cod]
+*$py.class
+
+# Database files
+*.db
+*.sqlite3
+
+# Log files
+*.log
+
+# Environment files
+.env
+
+# Pytest / Coverage
+.pytest_cache/
+
+# Verification artifacts
+verification/
