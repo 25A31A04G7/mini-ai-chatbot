@@ -9,7 +9,10 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import User
 
-JWT_SECRET = os.getenv("JWT_SECRET", "mini-ai-default-secret-key-change-in-production")
+JWT_SECRET = os.getenv("JWT_SECRET")
+if not JWT_SECRET:
+    raise RuntimeError("JWT_SECRET environment variable is required")
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = 7
 

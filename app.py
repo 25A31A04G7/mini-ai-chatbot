@@ -6,7 +6,6 @@ from typing import List, Optional
 
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from sqlalchemy.orm import Session
 from dotenv import load_dotenv
@@ -32,17 +31,18 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="Mini AI Chatbot API")
 
 # Allow our frontend to communicate with the backend
+allowed_origins = [
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    "https://mini-ai-chatbot-1.onrender.com",
+    "https://mini-ai-chatbot-5l0w.onrender.com"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://127.0.0.1:5500",
-        "http://localhost:5500",
-        "http://127.0.0.1:8000",
-        "http://localhost:8000",
-        "https://mini-ai-chatbot-1.onrender.com",
-        "https://mini-ai-chatbot-5l0w.onrender.com",
-        "*"
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -337,7 +337,9 @@ def chat(
     if current_user:
         if request.chat_id:
             chat_obj = db.query(models.Chat).filter(models.Chat.id == request.chat_id).first()
-            if chat_obj and chat_obj.user_id != current_user.id:
+            if not chat_obj:
+                raise HTTPException(status_code=404, detail="Chat not found")
+            if chat_obj.user_id != current_user.id:
                 raise HTTPException(status_code=403, detail="Forbidden: You do not own this chat")
 
         if not chat_obj:
@@ -395,7 +397,3 @@ def chat(
         res["chat_title"] = chat_obj.title
 
     return res
-
-
-# Serve static files for frontend UI
-app.mount("/", StaticFiles(directory=".", html=True), name="static")
