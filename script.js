@@ -177,9 +177,8 @@ async function loadBackendChats() {
 
         if (response.ok) {
             const chats = await response.json();
-            localConversations = chats;
-            renderChatHistory();
-            startNewChat();
+           localConversations = chats;
+renderChatHistory();
         }
     } catch (error) {
         console.error("Failed to load backend chats:", error);

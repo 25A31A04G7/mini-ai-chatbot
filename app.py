@@ -384,16 +384,32 @@ def chat(
     else:
         messages_history.append({"role": "user", "content": message_text})
 
-    reply_content = "I couldn't process your request right now."
+        reply_content = "I couldn't process your request right now."
+
     if client:
         try:
             response = client.chat.completions.create(
                 model="openai/gpt-oss-20b",
-                messages=messages_history
+                messages=[
+                    {
+                        "role": "system",
+                        "content": """You are Mini AI, a helpful AI assistant.
+
+Your name is Mini AI.
+Never introduce yourself as ChatGPT or claim to be ChatGPT.
+If someone asks who you are, say that you are Mini AI, an AI assistant.
+
+Be friendly, natural, clear, and helpful.
+Explain difficult topics in simple language when appropriate."""
+                    },
+                    *messages_history
+                ]
             )
             reply_content = response.choices[0].message.content
+
         except Exception as e:
             reply_content = f"Error communicating with AI service: {str(e)}"
+
     else:
         reply_content = "Groq API key is not configured on the server."
 
