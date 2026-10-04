@@ -31,7 +31,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Mini AI Chatbot API")
 
-# Allow our frontend to communicate with the backend
+# Allow our frontend to communicate with the backend across allowed domains and GitHub Codespaces
 allowed_origins = [
     "http://127.0.0.1:5500",
     "http://localhost:5500",
@@ -44,6 +44,7 @@ allowed_origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
+    allow_origin_regex=r"https://.*\.app\.github\.dev",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
