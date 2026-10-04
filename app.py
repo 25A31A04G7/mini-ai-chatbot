@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from typing import List, Optional
 
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from sqlalchemy.orm import Session
@@ -112,6 +113,23 @@ class ChatUpdate(BaseModel):
 class ChatRequest(BaseModel):
     message: str
     chat_id: Optional[str] = None
+
+
+# =========================================================
+# FRONTEND STATIC ASSETS ENDPOINTS (SAFE & EXPLICIT)
+# =========================================================
+
+@app.get("/", response_class=FileResponse)
+def serve_index():
+    return FileResponse("index.html")
+
+@app.get("/style.css", response_class=FileResponse)
+def serve_style():
+    return FileResponse("style.css")
+
+@app.get("/script.js", response_class=FileResponse)
+def serve_script():
+    return FileResponse("script.js")
 
 
 # =========================================================

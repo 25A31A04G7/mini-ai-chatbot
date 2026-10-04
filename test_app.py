@@ -20,6 +20,36 @@ def setup_db():
 
 client = TestClient(app)
 
+# =========================================================
+# FRONTEND ROUTE TESTS
+# =========================================================
+
+def test_frontend_root_route():
+    res = client.get("/")
+    assert res.status_code == 200
+    assert "text/html" in res.headers["content-type"]
+    assert "Mini AI" in res.text
+
+def test_frontend_static_assets():
+    res_css = client.get("/style.css")
+    assert res_css.status_code == 200
+    assert "text/css" in res_css.headers["content-type"] or "text/plain" in res_css.headers["content-type"]
+
+    res_js = client.get("/script.js")
+    assert res_js.status_code == 200
+
+def test_protected_files_not_exposed():
+    assert client.get("/app.py").status_code == 404
+    assert client.get("/auth.py").status_code == 404
+    assert client.get("/database.py").status_code == 404
+    assert client.get("/models.py").status_code == 404
+    assert client.get("/.env").status_code == 404
+    assert client.get("/miniai.db").status_code == 404
+
+# =========================================================
+# AUTHENTICATION & USER TESTS
+# =========================================================
+
 def test_signup_valid():
     res = client.post("/signup", json={
         "name": "Alice Developer",
