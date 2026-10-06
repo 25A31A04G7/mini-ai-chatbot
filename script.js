@@ -3,11 +3,14 @@
 // =========================================================
 
 // Determine backend URL dynamically or use default
-const API_BASE_URL = window.location.origin;
+const API_BASE_URL =
+    window.location.origin.includes("localhost") ||
+    window.location.origin.includes("127.0.0.1")
+        ? window.location.origin
+        : "https://mini-ai-chatbot-backend.onrender.com";
 
 const CHAT_API_URL = `${API_BASE_URL}/chat`;
 const AUTH_API_URL = API_BASE_URL;
-
 // =========================================================
 // DOM ELEMENTS
 // =========================================================
