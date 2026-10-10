@@ -1,20 +1,43 @@
-# Byte-compiled / optimized / DLL files
+# Python byte-compiled / optimized files
 __pycache__/
 *.py[cod]
 *$py.class
 
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+
 # Database files
 *.db
+*.sqlite
 *.sqlite3
 
 # Log files
 *.log
+logs/
 
-# Environment files
-.env
-
-# Pytest / Coverage
+# Pytest / coverage
 .pytest_cache/
+.coverage
+htmlcov/
 
 # Verification artifacts
 verification/
+
+# IDE and editor files
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
